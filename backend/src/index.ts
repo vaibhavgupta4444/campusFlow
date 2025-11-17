@@ -1,9 +1,20 @@
-import express from "express";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const app = express();
+import express from "express";
+import dbConnect from "./config/dbConnect";
+import cors from 'cors'
+import userRouter from "./routes/userRoute";
+
 const port = 3000;
+const app = express();
+
+dbConnect();
 
 app.use(express.json());
+app.use(cors());
+
+app.use('/api/user', userRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello from TypeScript + Express!");
