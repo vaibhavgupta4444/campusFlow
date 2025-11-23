@@ -279,6 +279,11 @@ const SignUp = () => {
                             <span className="text-sm font-medium">Admin</span>
                           </RadioGroupItem>
                         </Label>
+                        <Label htmlFor="admin" className="cursor-pointer">
+                          <RadioGroupItem value="admin" id="admin" className="w-full">
+                            <span className="text-sm font-medium">Council</span>
+                          </RadioGroupItem>
+                        </Label>
                       </RadioGroup>
                     </FormControl>
                     <FormMessage />
