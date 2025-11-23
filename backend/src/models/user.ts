@@ -1,15 +1,5 @@
 import mongoose from "mongoose";
-
-export interface IUser{
-    name: string;
-    email: string;
-    password: string;
-    dob: Date;
-    role: 'student' | 'teacher' | 'company' | 'admin';
-    department: string;
-    year: string;
-    avatar: string;
-}
+import { IUser } from "../interfaces/user";
 
 const userSchema = new mongoose.Schema<IUser>({
     name:{
@@ -33,7 +23,7 @@ const userSchema = new mongoose.Schema<IUser>({
     },
     role:{
         type: String,
-        enum: ['student', 'teacher', 'company', 'admin'],
+        enum: ['student', 'teacher', 'company', 'admin', 'council'],
         default: 'student'
     },
     department:{
