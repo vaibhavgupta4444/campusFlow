@@ -43,6 +43,7 @@ export const signup = async (request: any, response: any) => {
     });
 };
 
+
 export const signin = async (request: any, response: any) => {
 
     const { email, password } = request.body;
@@ -74,4 +75,30 @@ export const signin = async (request: any, response: any) => {
     }
 
     return response.json({ success: false, message: "Invalid credentials" });
+}
+
+
+
+export const getToken = async(request: any, response: any) => {
+    const userId = request.user?.id;
+
+    if(!userId){
+        throw BadRequestError('Email and password are required');
+    }
+
+    const user = await User.findById(userId);
+
+    if(!user){
+        throw NotFoundError('User not found');
+    }
+
+    const {token} = createToken(user._id);
+
+    return response.status(200).json({
+            success: true,
+            data: {
+                token,
+                expiresIn: '7d'
+            }
+    });
 }

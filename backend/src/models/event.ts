@@ -15,10 +15,10 @@ const eventSchema = new mongoose.Schema<IEvent>({
 
     date: {type: Date, required: true},
 
-    organizerId: { type: String, ref: 'user', required: true},
+    organizerId: { type: String, ref: 'User', required: true},
     banner:{type: String},
 
-    participants: { type: [String], default:[]}
+    participants: { type: [String], ref:'User', default:[]}
 },{timestamps: true});
 
 export const Event = (mongoose.models && mongoose.models.Event) || mongoose.model<IEvent>('Event', eventSchema);
