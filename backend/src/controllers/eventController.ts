@@ -3,6 +3,7 @@ import { Event } from "../models/event";
 import { createEventSchema } from "../schema/createEventSchema";
 import { BadRequestError, NotFoundError, UnauthorizedError } from '../utils/HttpError';
 import User from '../models/user';
+import { success } from 'zod';
 
 // Extend Request interface to match auth middleware
 interface AuthenticatedRequest extends Request {
@@ -31,7 +32,7 @@ export const createEvent = async (request: AuthenticatedRequest, response: Respo
     });
 
     await event.save();
-    
+
 
     return response.status(201).json({
         success: true,
@@ -86,6 +87,32 @@ export const getEvents = async (request: Request, response: Response) => {
         }
     });
 };
+
+export const getSingleEvent = async (request: Request, response: Response) => {
+    const { eventId } = request.params; // Get from route params, not query
+
+    if(!eventId){
+        throw BadRequestError('Event ID is required');
+    }
+
+    if(!eventId.match(/^[0-9a-fA-F]{24}$/)){
+        throw BadRequestError('Invalid event ID format');
+    }
+
+    const event = await Event.findById(eventId)
+        .populate('organizerId', 'name email avatar') // Populate organizer details
+        .populate('participants', 'name email avatar'); // Populate participant details
+
+    if(!event){
+        throw NotFoundError('Event not found');
+    }
+
+    return response.status(200).json({
+        success: true,
+        data: event
+    });
+};
+
 
 export const joinEvent = async (request: AuthenticatedRequest, response: Response) => {
     const { eventId } = request.body;
