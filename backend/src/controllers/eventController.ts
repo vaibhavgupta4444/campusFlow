@@ -31,6 +31,7 @@ export const createEvent = async (request: AuthenticatedRequest, response: Respo
     });
 
     await event.save();
+    
 
     return response.status(201).json({
         success: true,
